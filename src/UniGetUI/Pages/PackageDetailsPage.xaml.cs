@@ -1,10 +1,15 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Microsoft.UI.Xaml.Documents;
+using Windows.UI.Text;
+using ExternalLibraries.Pickers;
 using UniGetUI.Core.Data;
 using UniGetUI.Core.Logging;
 using UniGetUI.Core.Tools;
@@ -14,12 +19,9 @@ using UniGetUI.PackageEngine.Interfaces;
 using UniGetUI.PackageEngine.Managers.PowerShellManager;
 using UniGetUI.PackageEngine.Operations;
 using UniGetUI.PackageEngine.PackageClasses;
-using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.UI;
-using Windows.UI.Text;
 using UniGetUI.Interface.Enums;
 using UniGetUI.Interface.Widgets;
+using FileSavePicker = Windows.Storage.Pickers.FileSavePicker;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -394,7 +396,7 @@ namespace UniGetUI.Interface.Dialogs
             if (u == null)
             {
                 h.Inlines.Clear();
-                h.Inlines.Add(new Run
+                h.Inlines.Add(new Run()
                 {
                     Text = CoreTools.Translate("Not available"),
                     TextDecorations = TextDecorations.None,
@@ -592,20 +594,29 @@ namespace UniGetUI.Interface.Dialogs
 
                     MainGrid.RowDefinitions.Clear();
                     MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-                    MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-                    Grid.SetRow(LeftPanel, 1);
+                    Grid.SetRow(LeftPanel, 0);
                     Grid.SetRow(RightPanel, 0);
-                    Grid.SetRow(TitlePanel, 0);
-                    Grid.SetRowSpan(RightPanel, 2);
 
                     LeftPanel.Children.Clear();
                     RightPanel.Children.Clear();
                     MainGrid.Children.Clear();
+
+                    Grid.SetRow(TitlePanel, 0);
+                    Grid.SetRow(DescriptionPanel, 1);
+                    Grid.SetRow(BasicInfoPanelText, 2);
+                    Grid.SetRow(ActionsPanel, 3);
+                    Grid.SetRow(InstallOptionsBorder, 4);
+
+                    LeftPanel.Children.Add(TitlePanel);
                     LeftPanel.Children.Add(DescriptionPanel);
                     LeftPanel.Children.Add(BasicInfoPanelText);
-                    RightPanel.Children.Add(ScreenshotsPanel);
                     LeftPanel.Children.Add(ActionsPanel);
                     LeftPanel.Children.Add(InstallOptionsBorder);
+
+                    Grid.SetRow(ScreenshotsPanel, 0);
+                    Grid.SetRow(DetailsPanelText, 1);
+
+                    RightPanel.Children.Add(ScreenshotsPanel);
                     RightPanel.Children.Add(DetailsPanelText);
                     ScreenshotsCarroussel.Height = PackageHasScreenshots ? 400 : 150;
 
@@ -613,7 +624,6 @@ namespace UniGetUI.Interface.Dialogs
 
                     MainGrid.Children.Add(LeftPanel);
                     MainGrid.Children.Add(RightPanel);
-                    MainGrid.Children.Add(TitlePanel);
 
                 }
             }
